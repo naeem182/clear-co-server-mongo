@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
 
 // console.log(process.env.DB_USER)
 // console.log(process.env.DB_PASS)
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.il0t7ji.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -22,7 +22,7 @@ const client = new MongoClient(uri, {
     serverApi: {
         version: ServerApiVersion.v1,
         strict: true,
-        deprecationErrors: true,
+        deprecationErrors: true, ObjectId
     }
 });
 async function run() {
@@ -45,6 +45,15 @@ async function run() {
 
             const booking = req.body;
             const result = await bookingCollection.insertOne(booking);
+
+            res.send(result)
+        })
+        //delete bookings
+        app.delete('/api/v1/user/cancelbookings/:bookingid', async (req, res) => {
+
+            const id = req.params.bookingid;
+            const query = { _id: new ObjectId(id) };
+            const result = await bookingCollection.deleteOne(query);
 
             res.send(result)
         })
