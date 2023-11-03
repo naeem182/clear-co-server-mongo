@@ -1,0 +1,62 @@
+[
+    {
+        "name": "Super Clean Pro",
+        "description": "Our flagship cleaner for heavy-duty cleaning tasks.",
+        "price": 49.99,
+        "features": [
+            "Powerful motor for fast cleaning",
+            "Multiple attachments for versatile cleaning",
+            "Large dustbin for less frequent emptying"
+        ]
+    },
+    {
+        "name": "Eco-Friendly Cleanmate",
+        "description": "An eco-conscious cleaner that's gentle on the environment.",
+        "price": 59.99,
+        "features": [
+            "Energy-efficient operation",
+            "HEPA filter for clean air",
+            "Quiet operation for a peaceful environment"
+        ]
+    },
+    {
+        "name": "Pet Hair Buster",
+        "description": "Specially designed for pet owners to tackle pet hair and dander.",
+        "price": 39.99,
+        "features": [
+            "Tangle-free brush roll for pet hair",
+            "Washable filter for easy maintenance",
+            "Specialized pet tools included"
+        ]
+    },
+    {
+        "name": "Compact & Portable Mini Cleaner",
+        "description": "Ideal for small spaces and on-the-go cleaning needs.",
+        "price": 29.99,
+        "features": [
+            "Compact design for easy storage",
+            "Cordless and lightweight for portability",
+            "Effective for quick clean-ups"
+        ]
+    },
+    {
+        "name": "All-in-One Cleaning Wizard",
+        "description": "Versatile cleaner for various surfaces and cleaning needs.",
+        "price": 69.99,
+        "features": [
+            "Multi-surface cleaning capabilities",
+            "Adjustable suction power for different tasks",
+            "Convenient storage for accessories"
+        ]
+    },
+    {
+        "name": "Smart Home Cleaner",
+        "description": "A cleaner that can be controlled using a smartphone app.",
+        "price": 79.99,
+        "features": [
+            "Wi-Fi connectivity for remote control",
+            "Scheduled cleaning and mapping features",
+            "Voice assistant compatibility"
+        ]
+    }
+]
