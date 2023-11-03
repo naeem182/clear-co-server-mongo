@@ -4,6 +4,10 @@ require('dotenv').config();
 const app = express()
 const port = process.env.port || 5000;
 
+//parser booking
+app.use(express.json())
+
+
 app.get('/', (req, res) => {
     res.send('clean co server is running')
 })
@@ -27,10 +31,21 @@ async function run() {
         await client.connect();
 
         const serviceCollection = client.db('CleanCo').collection('services');
-        //get jsondata 
+        const bookingCollection = client.db('CleanCo').collection('bookings');
+
+
+        //get jsondata
         app.get('/api/v1/services', async (req, res) => {
             const cursor = serviceCollection.find()
             const result = await cursor.toArray()
+            res.send(result)
+        })
+        //create bookings
+        app.post('/api/v1/user/createbookings', async (req, res) => {
+
+            const booking = req.body;
+            const result = await bookingCollection.insertOne(booking);
+
             res.send(result)
         })
 
