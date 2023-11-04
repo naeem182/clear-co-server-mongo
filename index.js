@@ -2,8 +2,26 @@ const express = require('express')
 const cors = require('cors')
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const app = express()
-const port = process.env.port || 5000;
+const cookieParser = require('cookie-parser');
+require('dotenv').config();
+const app = express();
+const port = process.env.PORT || 5000;
+
+
+
+// Middleware
+app.use(cors({
+    origin: [
+        'http://localhost:5173', 'http://localhost:5174'
+
+    ],
+    credentials: true
+}));
+
+
+
+app.use(express.json());
+app.use(cookieParser());
 
 //parser booking
 app.use(express.json())
