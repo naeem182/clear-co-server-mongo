@@ -46,7 +46,7 @@ const client = new MongoClient(uri, {
 });
 
 // gateman                                                                         
-const middlewire = async (req, res, next) => {
+const logger = async (req, res, next) => {
     console.log('log: info', req.method, req.url);
     // console.log('called:', req.host, req.originalUrl)
     next();
@@ -83,7 +83,7 @@ async function run() {
 
 
         //get jsondata
-        app.get('/api/v1/services', middlewire, async (req, res) => {
+        app.get('/api/v1/services', logger, async (req, res) => {
             const cursor = serviceCollection.find()
             const result = await cursor.toArray()
             res.send(result)
@@ -96,16 +96,54 @@ async function run() {
 
             res.send(result)
         })
-        //         //user specific bookings
-        //         app.post('/api/v1/user/bookings', async (req, res) => {
-        // const email
+        //user specific bookings
+        app.get('/api/v1/user/bookings', logger, gateman, async (req, res) => {
+            console.log(req.query.email);
+            // console.log('tt token', req.cookies.token)
+            console.log('user in the valid token', req.user)
+            if (req.query.email !== req.user.email) {
+                return res.status(403).send({ message: 'forbidden access' })
+            }
+
+            let query = {};
+            if (req.query?.email) {
+                query = { email: req.query.email }
+            }
+            const result = await bookingCollection.find(query).toArray();
+            console.log(result)
+            res.send(result);
+        })
 
 
 
 
-        //             const result = await bookingCollection.find(query).toArray();
-        //             res.send(result);
-        //         })
+
+
+
+
+
+        // app.post('/api/v1/user/bookings', logger, gateman, async (req, res) => {
+        //     const queryemail = req.query.email;
+        //     const tokenemail = req.user.email;
+        //     // match user email
+        //     console.log('tt token', req.cookies.token)
+        //     console.log('user in the valid token', req.user)
+        //     if (queryemail !== tokenemail) {
+        //         return res.status(403).send({ message: 'forbidden access' })
+        //     }
+
+        //     let query = {};
+        //     if (queryemail) {
+        //         query = { email: queryemail }
+        //     }
+        //     const result = await bookingCollection.find(query).toArray();
+        //     res.send(result);
+
+
+
+
+
+        // })
         //delete bookings
         app.delete('/api/v1/user/cancelbookings/:bookingid', async (req, res) => {
 
@@ -123,7 +161,7 @@ async function run() {
 
 
         // auth related api
-        app.post('/jwt', async (req, res) => {
+        app.post('/jwt', logger, async (req, res) => {
             const user = req.body;
             console.log('user for token', user);
 
