@@ -44,6 +44,35 @@ const client = new MongoClient(uri, {
         deprecationErrors: true, ObjectId
     }
 });
+
+// gateman                                                                         
+const middlewire = async (req, res, next) => {
+    console.log('log: info', req.method, req.url);
+    // console.log('called:', req.host, req.originalUrl)
+    next();
+}
+
+//token verify
+const gateman = async (req, res, next) => {
+    const token = req.cookies?.token;
+    console.log('value of the token in middlewire', token)
+    if (!token) {
+        return res.status(401).send({ message: 'unauthorized access' })
+    }
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+        if (err) {
+            return res.status(401).send({ message: 'unauthorized access' })
+        }
+        console.log('decoded', decoded)
+        req.user = decoded;
+        next();
+    })
+}
+
+
+
+
+
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
@@ -54,7 +83,7 @@ async function run() {
 
 
         //get jsondata
-        app.get('/api/v1/services', async (req, res) => {
+        app.get('/api/v1/services', middlewire, async (req, res) => {
             const cursor = serviceCollection.find()
             const result = await cursor.toArray()
             res.send(result)
@@ -67,6 +96,16 @@ async function run() {
 
             res.send(result)
         })
+        //         //user specific bookings
+        //         app.post('/api/v1/user/bookings', async (req, res) => {
+        // const email
+
+
+
+
+        //             const result = await bookingCollection.find(query).toArray();
+        //             res.send(result);
+        //         })
         //delete bookings
         app.delete('/api/v1/user/cancelbookings/:bookingid', async (req, res) => {
 
