@@ -86,16 +86,26 @@ async function run() {
         // filter//sort
         // http://localhost:5000/api/v1/services situation1
         // http://localhost:5000/api/v1/services/?category=Heavy-Duty situation1
+
+        // filteer
+        // http://localhost:5000/api/v1/services/?sortfield=price&sortorder=desc
         app.get('/api/v1/services', logger, async (req, res) => {
 
             let queryObj = {}
+            let sortObj = {}
+
             const category = req.query.category;
+            const sortfield = req.query.sortfield;
+            const sortorder = req.query.sortorder;
 
             if (category) {
                 queryObj.category = category
             }
+            if (sortfield && sortorder) {
+                sortObj[sortfield] = sortorder
+            }
 
-            const cursor = serviceCollection.find(queryObj)
+            const cursor = serviceCollection.find(queryObj).sort(sortObj)
             const result = await cursor.toArray()
             res.send(result)
         })
