@@ -89,14 +89,21 @@ async function run() {
 
         // filteer
         // http://localhost:5000/api/v1/services/?sortfield=price&sortorder=desc
+        // pagination
+        // http://localhost:5000/api/v1/services/?sortfield=price&sortorder=desc
         app.get('/api/v1/services', logger, async (req, res) => {
 
             let queryObj = {}
             let sortObj = {}
 
             const category = req.query.category;
+            //
             const sortfield = req.query.sortfield;
             const sortorder = req.query.sortorder;
+            //pagination
+            const page = Number(req.query.page)
+            const limit = Number(req.query.limit)
+            const skip = (page - 1) * limit;
 
             if (category) {
                 queryObj.category = category
@@ -105,7 +112,7 @@ async function run() {
                 sortObj[sortfield] = sortorder
             }
 
-            const cursor = serviceCollection.find(queryObj).sort(sortObj)
+            const cursor = serviceCollection.find(queryObj).skip(skip).limit(limit).sort(sortObj)
             const result = await cursor.toArray()
             res.send(result)
         })
