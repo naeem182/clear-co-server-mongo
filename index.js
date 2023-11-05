@@ -83,11 +83,24 @@ async function run() {
 
 
         //get jsondata
+        // filter//sort
+        // http://localhost:5000/api/v1/services situation1
+        // http://localhost:5000/api/v1/services/?category=Heavy-Duty situation1
         app.get('/api/v1/services', logger, async (req, res) => {
-            const cursor = serviceCollection.find()
+
+            let queryObj = {}
+            const category = req.query.category;
+
+            if (category) {
+                queryObj.category = category
+            }
+
+            const cursor = serviceCollection.find(queryObj)
             const result = await cursor.toArray()
             res.send(result)
         })
+
+
         //create bookings
         app.post('/api/v1/user/createbookings', async (req, res) => {
 
@@ -96,6 +109,7 @@ async function run() {
 
             res.send(result)
         })
+
         //user specific bookings
         app.get('/api/v1/user/bookings', logger, gateman, async (req, res) => {
             console.log(req.query.email);
@@ -161,7 +175,7 @@ async function run() {
 
 
         // auth related api
-        app.post('/jwt', logger, async (req, res) => {
+        app.post('/api/v1/auth/access-token', logger, async (req, res) => {
             const user = req.body;
             console.log('user for token', user);
 
